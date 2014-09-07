@@ -17,3 +17,19 @@ script:
 
 after_success:
   - coveralls --extension .c --extension .f --extension .h --exclude examples
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "HPTabzRa3xOY1VuxOnA/yqwOQoYkO5KfvKVpvRy5vmwPthkGIr337zrR5b6Vp0RfBuM1OrxU7rfL4inSJki7NwR/p/rreAJCzrnq+vT7Nk3fN3zVh00iXBdNc0B2KRFQAZmrsN1S/7OPwQu78VW6gGDkcyZxQGjYuuf91xDS6sk="
+
+addons:
+  coverity_scan:
+    project:
+      name: "devernay/cminpack"
+      description: "C/C++ Minpack"
+    notification_email: frederic.devernay@m4x.org
+    build_command_prepend: "sudo apt-get install gfortran libblas-dev liblapack-dev libilmbase-dev"
+    build_command:   "make double float lapack fortran half; make -k -C examples test ctest testdrv ctestdrv ftest ftestdrv"
+    branch_pattern: coverity_scan
